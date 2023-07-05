@@ -7,6 +7,7 @@
         body {
             background-color: black;
             margin: 0;
+            overflow: hidden;
         }
 
         .container {
@@ -29,7 +30,7 @@
 
         .line2 {
             font-family: 'Akira Expanded', sans-serif;
-            font-size: 48px;
+            font-size: 42px;
             color: white;
             text-transform: uppercase;
             letter-spacing: 0.2em;
@@ -37,37 +38,28 @@
         }
 
         .background-dots {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
-            overflow: hidden;
         }
 
         .dot {
             position: absolute;
-            background-color: white;
+            background-color: lightgray;
             border-radius: 50%;
             pointer-events: none;
-            opacity: 0.5;
-            animation-name: move-dot;
-            animation-duration: 10s;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
+            animation: moveDots linear infinite;
         }
 
-        @keyframes move-dot {
+        @keyframes moveDots {
             0% {
-                transform: translate(-50%, -50%);
-            }
-            50% {
-                transform: translate(calc(-50% + (100vw - 100px) * random()), calc(-50% + (100vh - 100px) * random()));
+                transform: translateY(0);
             }
             100% {
-                transform: translate(-50%, -50%);
+                transform: translateY(calc(-100vh + 50px));
             }
         }
     </style>
@@ -77,26 +69,28 @@
         <h1 class="line1">SYMRS</h1>
         <h2 class="line2">in work by tess</h2>
     </div>
-    <div class="background-dots">
-        <!-- Generate dots dynamically -->
-    </div>
+    <div class="background-dots"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var numDots = 200;
-            var backgroundDots = document.querySelector(".background-dots");
+        function createDot() {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            dot.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            dot.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            const dotSize = Math.random() * 20 + 5;
+            dot.style.width = dotSize + 'px';
+            dot.style.height = dotSize + 'px';
+            dot.style.animationDuration = Math.random() * 8 + 4 + 's';
+            document.querySelector('.background-dots').appendChild(dot);
+        }
 
-            for (var i = 0; i < numDots; i++) {
-                var dot = document.createElement("div");
-                dot.className = "dot";
-                dot.style.width = Math.floor(Math.random() * 20 + 10) + "px";
-                dot.style.height = dot.style.width;
-                dot.style.top = Math.random() * 100 + "%";
-                dot.style.left = Math.random() * 100 + "%";
-                dot.style.animationDelay = Math.random() * 5 + "s";
-                backgroundDots.appendChild(dot);
+        function createDots() {
+            for (let i = 0; i < 200; i++) {
+                createDot();
             }
-        });
+        }
+
+        createDots();
     </script>
 </body>
 </html>
